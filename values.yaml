@@ -13,11 +13,11 @@ cp-zookeeper:
     ## production servers this number should likely be much larger.
     ##
     ## Size for Data dir, where ZooKeeper will store the in-memory database snapshots.
-    dataDirSize: 5Gi
+    dataDirSize: 1Gi
     # dataDirStorageClass: ""
 
     ## Size for data log dir, which is a dedicated log device to be used, and helps avoid competition between logging and snaphots.
-    dataLogDirSize: 5Gi
+    dataLogDirSize: 1Gi
     # dataLogDirStorageClass: ""
   resources: {}
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
@@ -38,10 +38,15 @@ cp-kafka:
   image: confluentinc/cp-kafka
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"
-  persistence:
+  nodeport:
     enabled: true
-    # storageClass: ""
-    size: 5Gi
+  persistence:
+    enabled: false
+    volumes:
+      - size: 2Gi
+        storageClass: local-data 
+      - size: 2Gi
+        storageClass: local-data 
   resources: {}
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
   ## and remove the curly braces after 'resources:'
