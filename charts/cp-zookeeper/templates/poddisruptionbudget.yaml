@@ -3,6 +3,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "cp-zookeeper.fullname" . }}-pdb
+  namespace: {{ .Values.namespace }}
   labels:
     app: {{ template "cp-zookeeper.name" . }}
     chart: {{ template "cp-zookeeper.chart" . }}

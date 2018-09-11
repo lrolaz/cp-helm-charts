@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "cp-zookeeper.fullname" . }}-jmx-configmap
+  namespace: {{ .Values.namespace }}
   labels:
     app: {{ template "cp-zookeeper.name" . }}
     chart: {{ template "cp-zookeeper.chart" . }}

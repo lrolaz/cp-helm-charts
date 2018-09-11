@@ -14,7 +14,7 @@ servers: 3
 
 ## Images Info
 ## ref: https://hub.docker.com/r/confluentinc/cp-zookeeper/
-image: confluentinc/cp-zookeeper
+image: matchbox.local/confluentinc/cp-zookeeper
 imageTag: 5.0.0
 
 ## Specify a imagePullPolicy
@@ -92,7 +92,7 @@ prometheus:
   ## JMX Exporter Configuration
   ## ref: https://github.com/prometheus/jmx_exporter
   jmx:
-    enabled: true
+    enabled: false
     image: solsson/kafka-prometheus-jmx-exporter@sha256
     imageTag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
     port: 5556

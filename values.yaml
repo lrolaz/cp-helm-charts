@@ -2,9 +2,10 @@
 ## Zookeeper
 ## ------------------------------------------------------
 cp-zookeeper:
+  namespace: kube-kafka
   enabled: true
-  servers: 3
-  image: confluentinc/cp-zookeeper
+  servers: 1
+  image: matchbox.local/confluentinc/cp-zookeeper
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"
   persistence:
@@ -14,11 +15,11 @@ cp-zookeeper:
     ##
     ## Size for Data dir, where ZooKeeper will store the in-memory database snapshots.
     dataDirSize: 1Gi
-    # dataDirStorageClass: ""
+    dataDirStorageClass: local-data
 
     ## Size for data log dir, which is a dedicated log device to be used, and helps avoid competition between logging and snaphots.
     dataLogDirSize: 1Gi
-    # dataLogDirStorageClass: ""
+    dataLogDirStorageClass: local-data 
   resources: {}
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
   ## and remove the curly braces after 'resources:'
@@ -33,15 +34,16 @@ cp-zookeeper:
 ## Kafka
 ## ------------------------------------------------------
 cp-kafka:
+  namespace: kube-kafka
   enabled: true
-  brokers: 3
-  image: confluentinc/cp-kafka
+  brokers: 1
+  image: matchbox.local/confluentinc/cp-kafka
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"
   nodeport:
     enabled: true
   persistence:
-    enabled: false
+    enabled: true
     volumes:
       - size: 2Gi
         storageClass: local-data 
@@ -61,7 +63,7 @@ cp-kafka:
 ## Schema Registry
 ## ------------------------------------------------------
 cp-schema-registry:
-  enabled: true
+  enabled: false
   image: confluentinc/cp-schema-registry
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"
@@ -79,7 +81,7 @@ cp-schema-registry:
 ## REST Proxy
 ## ------------------------------------------------------
 cp-kafka-rest:
-  enabled: true
+  enabled: false
   image: confluentinc/cp-kafka-rest
   imageTag: 5.0.0
   resources: {}
@@ -96,7 +98,7 @@ cp-kafka-rest:
 ## Kafka Connect
 ## ------------------------------------------------------
 cp-kafka-connect:
-  enabled: true
+  enabled: false
   image: confluentinc/cp-kafka-connect
   imageTag: 5.0.0
   resources: {}
@@ -113,7 +115,7 @@ cp-kafka-connect:
 ## KSQL Server
 ## ------------------------------------------------------
 cp-ksql-server:
-  enabled: true
+  enabled: false
   image: confluentinc/cp-ksql-server
   imageTag: 5.0.0
   ksql:

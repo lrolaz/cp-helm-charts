@@ -1,6 +1,7 @@
 {{- if .Values.nodeport.enabled }}
   {{- $fullName := include "cp-kafka.fullname" . }}
   {{- $brokers := .Values.brokers | int }}
+  {{- $namespace := .Values.namespace }}
   {{- $servicePort := .Values.nodeport.servicePort }}
   {{- $root := . }}
   {{- range $i, $e := until $brokers }}
@@ -11,6 +12,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ $root.Release.Name }}-{{ $i }}-nodeport
+  namespace: {{ $namespace }}
   labels:
     app: {{ include "cp-kafka.name" $root }}
     chart: {{ template "cp-kafka.chart" $root }}

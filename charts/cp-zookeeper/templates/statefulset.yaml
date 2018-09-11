@@ -2,6 +2,7 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: {{ template "cp-zookeeper.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     app: {{ template "cp-zookeeper.name" . }}
     chart: {{ template "cp-zookeeper.chart" . }}
@@ -40,6 +41,8 @@ spec:
                     values:
                     - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
+      securityContext:
+        runAsUser: 999              
       containers:
       {{- if .Values.prometheus.jmx.enabled }}
       - name: prometheus-jmx-exporter
