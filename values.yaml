@@ -36,7 +36,7 @@ cp-zookeeper:
 cp-kafka:
   namespace: kube-kafka
   enabled: true
-  brokers: 1
+  brokers: 2
   image: matchbox.local/confluentinc/cp-kafka
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"

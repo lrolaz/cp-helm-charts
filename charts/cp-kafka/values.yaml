@@ -89,9 +89,9 @@ prometheus:
   ## JMX Exporter Configuration
   ## ref: https://github.com/prometheus/jmx_exporter
   jmx:
-    enabled: false
-    image: solsson/kafka-prometheus-jmx-exporter@sha256
-    imageTag: a23062396cd5af1acdf76512632c20ea6be76885dfc20cd9ff40fb23846557e8
+    enabled: true
+    image: matchbox.local/solsson/kafka-prometheus-jmx-exporter
+    imageTag: latest
     port: 5556
 
 nodeport:
