@@ -120,3 +120,21 @@ cp-ksql-server:
   imageTag: 5.0.0
   ksql:
     headless: false
+    
+## ------------------------------------------------------
+## Control Center Server
+## ------------------------------------------------------
+cp-control-center:
+  enabled: true
+  namespace: kube-kafka  
+  image: matchbox.local/confluentinc/cp-enterprise-control-center
+  imageTag: 5.0.0
+  ingress:
+    hosts:
+      - control-center.kube-kafka.kube-labo.pco.corp
+
+strimzi-topic-operator:
+  enabled: true  
+  namespace: kube-kafka  
+  image: matchbox.local/strimzi/topic-operator
+  imageTag: latest    

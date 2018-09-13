@@ -1,0 +1,46 @@
+---
+# Deny all Ingress traffic
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-deny-ingress
+  namespace: kube-kafka
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+
+---
+# Allow all traffic inside this namespace
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-allow-in-namespace
+  namespace: kube-kafka
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    - podSelector: {}
+
+---
+# Allow Readiness/Liveness and Prometheus Monitoring
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: default-allow-kube-monitoring
+  namespace: kube-kafka
+spec:
+  podSelector: {}
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-monitoring
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+    - namespaceSelector:
+        matchLabels:
+          name: kube-ingress
+

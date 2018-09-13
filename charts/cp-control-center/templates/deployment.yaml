@@ -1,0 +1,45 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "cp-control-center.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ template "cp-control-center.name" . }}
+    chart: {{ template "cp-control-center.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "cp-control-center.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "cp-control-center.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      securityContext:
+        runAsUser: 999     
+      containers:
+        - name: {{ template "cp-control-center.name" . }}-server
+          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+          ports:
+            - name: control-center
+              containerPort: {{ .Values.servicePort}}
+              protocol: TCP
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          env:
+          - name: KAFKA_REST_HOST_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: CONTROL_CENTER_ZOOKEEPER_CONNECT
+            value: {{ template "cp-control-center.cp-zookeeper.service-name" . }}
+          - name: CONTROL_CENTER_BOOTSTRAP_SERVERS
+            value: {{ template "cp-control-center.kafka.bootstrapServers" . }}
+          - name: CONTROL_CENTER_REPLICATION_FACTOR
+            value: "1"
