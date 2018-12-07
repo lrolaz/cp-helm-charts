@@ -4,8 +4,8 @@
 cp-zookeeper:
   namespace: kube-kafka
   enabled: true
-  servers: 1
-  image: matchbox.local/confluentinc/cp-zookeeper
+  servers: 3
+  image: confluentinc/cp-zookeeper
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"
   persistence:
@@ -15,11 +15,17 @@ cp-zookeeper:
     ##
     ## Size for Data dir, where ZooKeeper will store the in-memory database snapshots.
     dataDirSize: 1Gi
-    dataDirStorageClass: local-data
+    dataDirStorageClass: standard
 
     ## Size for data log dir, which is a dedicated log device to be used, and helps avoid competition between logging and snaphots.
     dataLogDirSize: 1Gi
-    dataLogDirStorageClass: local-data 
+    dataLogDirStorageClass: standard 
+  prometheus:
+    ## JMX Exporter Configuration
+    ## ref: https://github.com/prometheus/jmx_exporter
+    jmx:
+      enabled: true
+      image: solsson/kafka-prometheus-jmx-exporter     
   resources: {}
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
   ## and remove the curly braces after 'resources:'
@@ -36,8 +42,8 @@ cp-zookeeper:
 cp-kafka:
   namespace: kube-kafka
   enabled: true
-  brokers: 2
-  image: matchbox.local/confluentinc/cp-kafka
+  brokers: 3
+  image: confluentinc/cp-kafka
   imageTag: 5.0.0
   heapOptions: "-Xms512M -Xmx512M"
   nodeport:
@@ -46,9 +52,14 @@ cp-kafka:
     enabled: true
     volumes:
       - size: 2Gi
-        storageClass: local-data 
+        storageClass: local-scsi 
       - size: 2Gi
-        storageClass: local-data 
+        storageClass: local-scsi 
+  prometheus:
+    ## JMX Exporter Configuration
+    ## ref: https://github.com/prometheus/jmx_exporter
+    jmx:
+      enabled: false         
   resources: {}
   ## If you do want to specify resources, uncomment the following lines, adjust them as necessary,
   ## and remove the curly braces after 'resources:'
@@ -127,14 +138,13 @@ cp-ksql-server:
 cp-control-center:
   enabled: true
   namespace: kube-kafka  
-  image: matchbox.local/confluentinc/cp-enterprise-control-center
+  image: confluentinc/cp-enterprise-control-center
   imageTag: 5.0.0
   ingress:
-    hosts:
-      - control-center.kube-kafka.kube-labo.pco.corp
+    enabled: true
 
 strimzi-topic-operator:
   enabled: false  
   namespace: kube-kafka  
-  image: matchbox.local/strimzi/topic-operator
+  image: strimzi/topic-operator
   imageTag: latest    

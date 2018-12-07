@@ -43,7 +43,8 @@ spec:
                     - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       securityContext:
-        runAsUser: 999                  
+        runAsUser: 999      
+        fsGroup: 999               
       containers:
       {{- if .Values.prometheus.jmx.enabled }}
       - name: prometheus-jmx-exporter
@@ -87,6 +88,10 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name        
         - name: POD_IP
           valueFrom:
             fieldRef:

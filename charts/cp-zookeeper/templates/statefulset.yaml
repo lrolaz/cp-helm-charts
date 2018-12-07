@@ -42,7 +42,8 @@ spec:
                     - {{ .Release.Name }}
               topologyKey: "kubernetes.io/hostname"
       securityContext:
-        runAsUser: 999              
+        runAsUser: 999      
+        fsGroup: 999        
       containers:
       {{- if .Values.prometheus.jmx.enabled }}
       - name: prometheus-jmx-exporter
